@@ -33,8 +33,15 @@ function escapeHtml(s) {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
+function photoHtml(item) {
+  const ref = String(item.photoRef || '');
+  const isImage = ref.startsWith('data:image/') || /^https?:\/\/\S+\.(png|jpe?g|webp|gif)(\?\S*)?$/i.test(ref);
+  return isImage ? `<img class="item-photo" src="${escapeHtml(ref)}" alt="Photo of ${escapeHtml(item.title)}">` : '';
+}
+
 function cardHtml(item) {
   return `<article class="card">
+    ${photoHtml(item)}
     <h3>${escapeHtml(item.title)}</h3>
     <p><span class="badge">${escapeHtml(item.referenceId)}</span> <span class="badge">${escapeHtml(item.status)}</span></p>
     <p><strong>${escapeHtml(item.category)}</strong> · ${escapeHtml(item.location)}</p>
@@ -95,14 +102,57 @@ $('track-form').addEventListener('submit', (e) => {
   if (ref) openItem(ref);
 });
 
+// Shrink a chosen photo (max 800px on the long side) so it stays small
+// enough to store with the report, then return it as a JPEG data URL.
+function readPhotoFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, 800 / Math.max(img.width, img.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(img.width * scale));
+        canvas.height = Math.max(1, Math.round(img.height * scale));
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/jpeg', 0.8));
+      };
+      img.onerror = () => reject(new Error('Could not read that photo. Please choose another image.'));
+      img.src = reader.result;
+    };
+    reader.onerror = () => reject(new Error('Could not read that photo.'));
+    reader.readAsDataURL(file);
+  });
+}
+
+$('photo-file').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  const preview = $('photo-preview');
+  if (!file) { preview.hidden = true; preview.src = ''; return; }
+  try {
+    preview.src = await readPhotoFile(file);
+    preview.hidden = false;
+  } catch (err) {
+    preview.hidden = true;
+    showMessage(err.message, true);
+  }
+});
+
 // ---- Report ----
 $('report-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = Object.fromEntries(new FormData(e.target).entries());
   try {
+    const file = $('photo-file').files[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) throw new Error('Please choose an image file for the photo.');
+      data.photoRef = await readPhotoFile(file);
+    }
     const item = await api('/api/items', { method: 'POST', body: JSON.stringify(data) });
     $('report-result').textContent = `Report submitted! Your reference ID is ${item.referenceId}. Status: Pending — Staff will approve it before it appears on the board.`;
     e.target.reset();
+    $('photo-preview').hidden = true;
+    $('photo-preview').src = '';
     loadBoard();
   } catch (err) {
     $('report-result').textContent = err.message;
@@ -118,7 +168,7 @@ window.openItem = async function (ref) {
     const item = await api('/api/items/' + ref);
     $('details-box').innerHTML = cardHtml(item) +
       `<p><strong>Description:</strong> ${escapeHtml(item.description)}</p>
-       <p><strong>Photo:</strong> ${escapeHtml(item.photoRef || '—')}</p>`;
+       ${photoHtml(item) || '<p><strong>Photo:</strong> No photo provided.</p>'}`;
     const { matches } = await api(`/api/items/${ref}/matches`);
     $('matches-box').innerHTML = matches.length
       ? matches.map((m) => cardHtml(m.item) + `<p>Match score: ${m.score}/100 — ${escapeHtml(m.reasons.join(', '))}. Suggestion only, not proof of ownership.</p>`).join('')

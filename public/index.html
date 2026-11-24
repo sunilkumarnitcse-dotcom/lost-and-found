@@ -88,9 +88,10 @@
         <label>Date *
           <input type="date" name="date" required>
         </label>
-        <label>Photo reference (optional)
-          <input name="photoRef" placeholder="File name or link, if any">
+        <label>Photo of the item (optional)
+          <input type="file" id="photo-file" accept="image/*">
         </label>
+        <img id="photo-preview" class="photo-preview" alt="Photo preview" hidden>
         <label>Last known location (for lost items)
           <input name="lastKnownLocation" placeholder="e.g. Library, 2nd floor">
         </label>

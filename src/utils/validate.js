@@ -30,6 +30,12 @@ function validateItem(body) {
   if (body.description && String(body.description).length > 2000) {
     errors.push('Description must be 2000 characters or less.');
   }
+  if (body.photoRef && String(body.photoRef).length > 700000) {
+    errors.push('Photo is too large. Please choose a smaller photo.');
+  }
+  if (body.photoRef && !String(body.photoRef).startsWith('data:image/') && !/^https?:\/\//.test(String(body.photoRef))) {
+    errors.push('Photo must be an uploaded image or a link.');
+  }
 
   return { valid: errors.length === 0, errors };
 }
