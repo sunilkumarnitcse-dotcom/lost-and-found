@@ -184,8 +184,14 @@ ul li button { padding: 5px 10px; font-size: 0.85rem; margin-left: 6px; }
   color: #fff;
   border-bottom: 4px solid #b5892e;
   padding: 18px 20px 14px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
 }
+.institute-bar .inst-logo { height: 76px; width: 76px; background: #fff; border-radius: 50%; padding: 4px; object-fit: contain; flex-shrink: 0; }
+.institute-bar .inst-text { text-align: left; }
 .institute-bar .inst-name { font-size: 1.35rem; font-weight: 800; letter-spacing: 0.01em; margin: 0; }
 .institute-bar .inst-hindi { margin: 2px 0 0; color: #fde68a; font-size: 1rem; }
 .institute-bar .inst-sub { margin: 4px 0 0; color: #c7d7f2; font-size: 0.88rem; }
