@@ -102,7 +102,16 @@ async function refreshStaff() {
 
     if (myRole === 'Admin') {
       const dash = await api('/api/admin/dashboard');
-      $('dashboard').innerHTML = `<p>Total items: <strong>${dash.counts.totalItems}</strong> · Pending: <strong>${dash.counts.pendingReports}</strong> · Available: <strong>${dash.counts.availableItems}</strong> · Returned: <strong>${dash.counts.returnedItems}</strong> · Pending claims: <strong>${dash.counts.pendingClaims}</strong> · Open inquiries: <strong>${dash.counts.openInquiries}</strong></p>`;
+      const c = dash.counts;
+      const stat = (n, l) => `<div class="stat-card"><div class="stat-num">${n}</div><div class="stat-label">${l}</div></div>`;
+      $('dashboard').innerHTML = `<div class="stat-grid">`
+        + stat(c.totalItems, 'Total Items')
+        + stat(c.pendingReports, 'Pending Reports')
+        + stat(c.availableItems, 'Available Items')
+        + stat(c.returnedItems, 'Returned Items')
+        + stat(c.pendingClaims, 'Pending Claims')
+        + stat(c.openInquiries, 'Open Inquiries')
+        + `</div>`;
       $('activity-list').innerHTML = dash.recentActivity.map((a) => `<li>${escapeHtml(a.action)} — ${escapeHtml(a.details || '')} (${new Date(a.createdAt).toLocaleString()})</li>`).join('');
       const cats = await api('/api/admin/categories');
       $('category-list').innerHTML = cats.map((c) => `<li>${escapeHtml(c.name)} <button type="button" onclick="deleteCategory('${c._id}')">Delete</button></li>`).join('');
