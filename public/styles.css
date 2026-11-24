@@ -207,14 +207,3 @@ ul li button { padding: 5px 10px; font-size: 0.85rem; margin-left: 6px; }
 .stat-num { font-size: 1.9rem; font-weight: 800; color: #0b2a5b; line-height: 1; }
 .stat-label { color: var(--muted); font-size: 0.9rem; font-weight: 600; margin-top: 4px; }
 
-.back-btn {
-  display: inline-block;
-  background: #eef2ff;
-  color: #3730a3;
-  border: 1px solid #c7d2fe;
-  padding: 9px 16px;
-  border-radius: 999px;
-  font-weight: 700;
-  text-decoration: none;
-}
-.back-btn:hover { background: #e0e7ff; }
