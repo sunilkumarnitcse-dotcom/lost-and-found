@@ -15,7 +15,6 @@
       <nav>
         <button data-tab="board" class="active">Found Board</button>
         <button data-tab="report">Report Lost / Found</button>
-        <button data-tab="staff">Staff / Admin</button>
         <button data-tab="contact">Contact Us</button>
       </nav>
     </div>
@@ -45,6 +44,12 @@
         </select>
         <button type="submit">Search</button>
         <button type="button" id="clear-filters">Clear</button>
+      </form>
+      <h3>Track My Report</h3>
+      <p>Apni report ka reference ID (jaise LF-2026-0001) dalo — sirf tumhari report ka status dikhega.</p>
+      <form id="track-form" class="filters">
+        <input id="track-ref" placeholder="LF-2026-0001" required>
+        <button type="submit">Track</button>
       </form>
       <div id="board" class="cards"></div>
     </section>
@@ -95,59 +100,6 @@
       <p id="report-result"></p>
     </section>
 
-    <!-- ============ STAFF / ADMIN ============ -->
-    <section id="tab-staff" class="tab" hidden>
-      <h2>Staff / Admin</h2>
-      <div id="login-box">
-        <p>Log in with your Staff or Admin PIN. Demo PINs are in the README / .env — change them before real use.</p>
-        <form id="login-form">
-          <label>PIN <input type="password" id="pin" required></label>
-          <button type="submit">Log In</button>
-        </form>
-      </div>
-      <div id="staff-area" hidden>
-        <p>Logged in as <strong id="staff-name"></strong> (<span id="staff-role"></span>)
-          <button id="logout-btn" type="button">Log Out</button></p>
-
-        <h3>Pending Reports</h3>
-        <div id="pending-list" class="cards"></div>
-
-        <h3>Claims to Review</h3>
-        <div id="claims-list" class="cards"></div>
-
-        <h3>Search-Sweep Tracker</h3>
-        <p>Enter a lost item's reference ID (e.g. LF-2026-0001) to see its campus-area checklist.</p>
-        <form id="sweep-form">
-          <input id="sweep-ref" placeholder="LF-2026-0001" required>
-          <button type="submit">Load Checklist</button>
-        </form>
-        <div id="sweep-area"></div>
-
-        <div id="admin-area" hidden>
-          <h3>Admin Dashboard</h3>
-          <div id="dashboard"></div>
-          <h3>Categories</h3>
-          <form id="category-form">
-            <input id="new-category" placeholder="New category name" required>
-            <button type="submit">Add Category</button>
-          </form>
-          <ul id="category-list"></ul>
-          <h3>Staff Accounts</h3>
-          <form id="staff-form">
-            <input id="new-staff-name" placeholder="Name" required>
-            <select id="new-staff-role"><option>Staff</option><option>Admin</option></select>
-            <input id="new-staff-pin" placeholder="PIN (min 4 chars)" required minlength="4">
-            <button type="submit">Add Account</button>
-          </form>
-          <ul id="staff-list"></ul>
-          <h3>Recent Activity</h3>
-          <ul id="activity-list"></ul>
-          <h3>Inquiries</h3>
-          <ul id="inquiry-list"></ul>
-        </div>
-      </div>
-    </section>
-
     <!-- ============ CONTACT ============ -->
     <section id="tab-contact" class="tab" hidden>
       <h2>Contact / Inquiry</h2>
@@ -182,6 +134,7 @@
 
   <footer>
     <p>Smart Campus Lost &amp; Found — built from the SRS / SDS / ADT. Backend: Node.js + Express + MongoDB.</p>
+    <p><a href="staff.html">Staff / Admin Login</a></p>
   </footer>
 
   <script src="app.js"></script>
