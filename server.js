@@ -10,17 +10,30 @@
 //   3. npm install
 //   4. npm start   (opens http://localhost:3000)
 //
-// If MONGODB_URI is not set, the server exits with a clear error.
-// It never falls back to another database.
+// If MONGODB_URI is not set, the server runs in Demo Mode with an
+// in-memory store (src/store/memory.js). Data resets on restart;
+// set MONGODB_URI for persistent MongoDB.
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
-const { connectDB } = require('./src/config/db');
-const { seed } = require('./src/seed');
+const { ensureReady } = require('./src/config/db');
 const { Category } = require('./src/models/Category');
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));
+
+// Make sure the database is connected and seeded before any API
+// request is handled. On serverless hosts the app is required as a
+// module and start() never runs, so this is what seeds the demo
+// Staff/Admin accounts and categories there.
+app.use('/api', async (req, res, next) => {
+  try {
+    await ensureReady();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 // ---- Public API ----
 app.use('/api/auth', require('./src/routes/auth'));
@@ -55,15 +68,13 @@ const PORT = process.env.PORT || 3000;
 
 async function start() {
   try {
-    await connectDB();
+    await ensureReady();
   } catch (err) {
     console.error('\nERROR: Could not start the server.');
     console.error(err.message);
     console.error('Set MONGODB_URI in your .env file (see .env.example) and try again.\n');
     process.exit(1);
   }
-
-  await seed();
 
   app.listen(PORT, () => {
     console.log(`Lost & Found server running at http://localhost:${PORT}`);

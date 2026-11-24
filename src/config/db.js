@@ -29,4 +29,25 @@ async function connectDB() {
   return true;
 }
 
-module.exports = { connectDB, isDemoMode };
+// Connect + seed once, on first use. This matters on serverless hosts
+// (Vercel): there the app is required as a module and start() never
+// runs, so without this the seed (demo Staff/Admin accounts and
+// categories) would never happen and login would fail with
+// "Wrong PIN, or this account is deactivated."
+let readyPromise = null;
+async function ensureReady() {
+  if (!readyPromise) {
+    readyPromise = (async () => {
+      await connectDB();
+      const { seed } = require('../seed');
+      await seed();
+      return true;
+    })().catch((err) => {
+      readyPromise = null;
+      throw err;
+    });
+  }
+  return readyPromise;
+}
+
+module.exports = { connectDB, isDemoMode, ensureReady };
