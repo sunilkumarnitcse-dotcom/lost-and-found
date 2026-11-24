@@ -1,6 +1,6 @@
 // Frontend for Smart Campus Lost & Found.
 // Plain JavaScript, no framework. Talks ONLY to the Express API
-// (never to MongoDB directly — SRS 3.1.3).
+// (never to MongoDB directly).
 const $ = (id) => document.getElementById(id);
 const msg = $('message');
 let token = localStorage.getItem('lf_token') || '';
@@ -65,7 +65,7 @@ async function loadCategories() {
   } catch (e) { /* categories load later, after the server is up */ }
 }
 
-// ---- Public board (FR-01, FR-02) ----
+// ---- Public board ----
 async function loadBoard() {
   const params = new URLSearchParams({
     q: $('q').value, category: $('filter-category').value,
@@ -88,14 +88,14 @@ $('clear-filters').addEventListener('click', () => {
 });
 
 
-// ---- Track my report: reporter sees only their own report (FR-04) ----
+// ---- Track my report: reporter sees only their own report ----
 $('track-form').addEventListener('submit', (e) => {
   e.preventDefault();
   const ref = $('track-ref').value.trim();
   if (ref) openItem(ref);
 });
 
-// ---- Report (FR-03, FR-04) ----
+// ---- Report ----
 $('report-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = Object.fromEntries(new FormData(e.target).entries());
@@ -109,7 +109,7 @@ $('report-form').addEventListener('submit', async (e) => {
   }
 });
 
-// ---- Item details + possible matches + claim (FR-12, FR-09) ----
+// ---- Item details + possible matches + claim ----
 window.openItem = async function (ref) {
   currentRef = ref;
   document.querySelectorAll('.tab').forEach((t) => { t.hidden = true; });
@@ -145,7 +145,7 @@ $('claim-form').addEventListener('submit', async (e) => {
   }
 });
 
-// ---- Contact / Inquiry (FR-16) ----
+// ---- Contact / Inquiry ----
 $('inquiry-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = Object.fromEntries(new FormData(e.target).entries());

@@ -1,6 +1,6 @@
 // Frontend for Smart Campus Lost & Found.
 // Plain JavaScript, no framework. Talks ONLY to the Express API
-// (never to MongoDB directly — SRS 3.1.3).
+// (never to MongoDB directly).
 const $ = (id) => document.getElementById(id);
 const msg = $('message');
 let token = localStorage.getItem('lf_token') || '';
@@ -146,7 +146,7 @@ window.deleteCategory = async function (id) {
   } catch (err) { showMessage(err.message, true); }
 };
 
-// ---- Search-Sweep Tracker (FR-17 to FR-20) ----
+// ---- Search-Sweep Tracker ----
 $('sweep-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const ref = $('sweep-ref').value.trim();

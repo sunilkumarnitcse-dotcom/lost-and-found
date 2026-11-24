@@ -10,8 +10,8 @@
   <header>
     <div class="hero">
       <span class="eyebrow">National Institute of Technology Kurukshetra &middot; Institution of National Importance</span>
-      <h1>Khoyi cheez, <span>wapas milegi.</span></h1>
-      <p class="tagline">Lost ya found item report karo, board par dhoondho, aur claim karke apni cheez wapas lo — sab kuch ek jagah.</p>
+      <h1>Lost something? <span>Let us help you find it.</span></h1>
+      <p class="tagline">Report a lost or found item, search the approved board, and claim your belongings — all in one place.</p>
       <nav>
         <button data-tab="board" class="active">Found Board</button>
         <button data-tab="report">Report Lost / Found</button>
@@ -21,9 +21,9 @@
   </header>
 
   <div class="steps">
-    <div class="step"><b data-n="1">Report karo</b><p>Item, jagah aur date likho — reference ID milega.</p></div>
-    <div class="step"><b data-n="2">Match dhoondho</b><p>Staff approve karega, phir board par dikhega.</p></div>
-    <div class="step"><b data-n="3">Claim karo</b><p>Evidence do, Staff verify karega, item wapas lo.</p></div>
+    <div class="step"><b data-n="1">Report it</b><p>Enter the item, location and date. You will receive a reference ID.</p></div>
+    <div class="step"><b data-n="2">Find a match</b><p>Staff will review and approve it, and then it will appear on the board.</p></div>
+    <div class="step"><b data-n="3">Claim it back</b><p>Submit your evidence. Staff will verify it and return the item to you.</p></div>
   </div>
 
   <main>
@@ -32,7 +32,7 @@
     <!-- ============ FOUND BOARD ============ -->
     <section id="tab-board" class="tab">
       <h2>Found Items — Approved Listings</h2>
-      <p>Only items approved by Staff appear here (SRS FR-01, FR-05). Contact details are never shown publicly.</p>
+      <p>Only items approved by Staff appear here. Contact details are never shown publicly.</p>
       <form id="search-form" class="filters">
         <input type="search" id="q" placeholder="Search by keyword, e.g. wallet">
         <select id="filter-category"><option value="">All categories</option></select>
@@ -46,7 +46,7 @@
         <button type="button" id="clear-filters">Clear</button>
       </form>
       <h3>Track My Report</h3>
-      <p>Apni report ka reference ID (jaise LF-2026-0001) dalo — sirf tumhari report ka status dikhega.</p>
+      <p>Enter your report reference ID (for example, LF-2026-0001). Only the status of your report will be shown.</p>
       <form id="track-form" class="filters">
         <input id="track-ref" placeholder="LF-2026-0001" required>
         <button type="submit">Track</button>
@@ -83,7 +83,7 @@
         <label>Photo reference (optional)
           <input name="photoRef" placeholder="File name or link, if any">
         </label>
-        <label>Last known location (for lost items, FR-17)
+        <label>Last known location (for lost items)
           <input name="lastKnownLocation" placeholder="e.g. Library, 2nd floor">
         </label>
         <label>Approximate time last seen
@@ -133,7 +133,7 @@
   </main>
 
   <footer>
-    <p>Smart Campus Lost &amp; Found — built from the SRS / SDS / ADT. Backend: Node.js + Express + MongoDB.</p>
+    <p>Smart Campus Lost &amp; Found — National Institute of Technology Kurukshetra. Backend: Node.js + Express + MongoDB.</p>
     <p><a href="staff.html">Staff / Admin Login</a></p>
   </footer>
 
