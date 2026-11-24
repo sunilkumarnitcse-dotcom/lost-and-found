@@ -1,10 +1,17 @@
-// Item category, managed by Admin (SRS FR-07).
+// Item category, managed by Admin.
+// MongoDB (Mongoose) when connected, in-memory Demo Mode otherwise.
 const mongoose = require('mongoose');
+const { isDemoMode } = require('../config/db');
 
-const categorySchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true, trim: true }
-}, { timestamps: true });
-
-const Category = mongoose.model('Category', categorySchema);
+let Category;
+if (isDemoMode()) {
+  const { createMemoryModel } = require('../store/memory');
+  Category = createMemoryModel('Category', { unique: [['name']] });
+} else {
+  const categorySchema = new mongoose.Schema({
+    name: { type: String, required: true, unique: true, trim: true }
+  }, { timestamps: true });
+  Category = mongoose.model('Category', categorySchema);
+}
 
 module.exports = { Category };

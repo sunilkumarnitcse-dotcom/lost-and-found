@@ -1,14 +1,19 @@
-// Counter for unique reference IDs like LF-2026-0001 (SRS FR-04).
-// One document per year, incremented atomically so two reports can
-// never get the same reference ID.
+// Counter for unique reference IDs like LF-2026-0001.
+// MongoDB (Mongoose) when connected, in-memory Demo Mode otherwise.
 const mongoose = require('mongoose');
+const { isDemoMode } = require('../config/db');
 
-const counterSchema = new mongoose.Schema({
-  _id: { type: String, required: true }, // e.g. "item-2026"
-  seq: { type: Number, default: 0 }
-});
-
-const Counter = mongoose.model('Counter', counterSchema);
+let Counter;
+if (isDemoMode()) {
+  const { createMemoryModel } = require('../store/memory');
+  Counter = createMemoryModel('Counter', { defaults: { seq: 0 } });
+} else {
+  const counterSchema = new mongoose.Schema({
+    _id: { type: String, required: true },
+    seq: { type: Number, default: 0 }
+  });
+  Counter = mongoose.model('Counter', counterSchema);
+}
 
 /** Return the next number in the sequence for this year (1, 2, 3, ...). */
 async function nextSequence(key) {

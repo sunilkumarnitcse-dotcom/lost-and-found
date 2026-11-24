@@ -1,35 +1,32 @@
 // MongoDB connection — the ONLY place the database is accessed from.
-// The frontend never talks to MongoDB directly (SRS 3.1.3).
+// The frontend never talks to MongoDB directly.
 // Connection string comes ONLY from the MONGODB_URI environment variable.
-// There is deliberately NO fallback database: if it is not set, the
-// server must fail with a clear message instead of silently using
-// another database.
+//
+// Demo Mode: when MONGODB_URI is not set (or still has placeholders),
+// the server does NOT fail. It runs with the in-memory store in
+// src/store/memory.js instead, so the login and the full demo work
+// without a database. Data in Demo Mode lives only in memory and
+// resets on restart — set a real MONGODB_URI for persistent MongoDB.
 const mongoose = require('mongoose');
 
-async function connectDB() {
+function isDemoMode() {
   const uri = process.env.MONGODB_URI;
+  return !uri || !uri.trim() || uri.includes('<user>') || uri.includes('<password>') || uri.includes('<cluster>');
+}
 
-  if (!uri || !uri.trim()) {
-    throw new Error(
-      'MONGODB_URI is not set. Copy .env.example to .env and set ' +
-      'MONGODB_URI to your MongoDB Atlas connection string ' +
-      '(mongodb+srv://<user>:<password>@<cluster>/lostfound). ' +
-      'The server will not start without a database.'
-    );
-  }
-
-  if (uri.includes('<user>') || uri.includes('<password>') || uri.includes('<cluster>')) {
-    throw new Error(
-      'MONGODB_URI still contains placeholder values (<user>, <password> or <cluster>). ' +
-      'Replace them with your real MongoDB Atlas username, password and cluster name in .env.'
-    );
+async function connectDB() {
+  if (isDemoMode()) {
+    console.log('Demo Mode: MONGODB_URI is not set — running with in-memory data (resets on restart).');
+    console.log('Set MONGODB_URI to a MongoDB Atlas connection string for persistent storage.');
+    return false;
   }
 
   // Fail fast if the cluster cannot be reached (5 seconds), so a bad
   // connection string is reported clearly instead of hanging.
   mongoose.set('strictQuery', true);
-  await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
+  await mongoose.connect(process.env.MONGODB_URI, { serverSelectionTimeoutMS: 5000 });
   console.log('Connected to MongoDB');
+  return true;
 }
 
-module.exports = { connectDB };
+module.exports = { connectDB, isDemoMode };

@@ -76,11 +76,14 @@ MONGODB_URI=mongodb+srv://<your-user>:<your-password>@<your-cluster>/lostfound
 In Atlas, also allow your IP in **Network Access** (or use `0.0.0.0/0`
 for a college demo) and create a database user for the cluster.
 
-> **Important:** MongoDB is **not connected yet** in this code as given —
-> Sunil has not provided any Atlas cluster or connection string yet.
-> If `MONGODB_URI` is missing or still has `<user>` / `<password>` /
-> `<cluster>` placeholders, the server **will not start**. It prints a
-> clear error and exits. It never silently uses another database.
+> **Demo Mode:** if `MONGODB_URI` is missing or still has `<user>` /
+> `<password>` / `<cluster>` placeholders, the server still starts —
+> in **Demo Mode**, with an in-memory store (`src/store/memory.js`).
+> Login, reporting, approval, claims and the dashboard all work,
+> but data lives only in memory and **resets on restart**. Set a real
+> Atlas `MONGODB_URI` for persistent MongoDB storage. In viva, say
+> this honestly: the code is MongoDB/Mongoose, and the live Vercel
+> deployment runs in Demo Mode until Atlas is connected.
 
 ### 4. Start the server
 
@@ -137,7 +140,8 @@ passwords (SRS NFR-03), not plain PINs.
 
 ```text
 server.js                  Entry point — Express app, static frontend
-src/config/db.js           MongoDB connection (MONGODB_URI only, no fallback)
+src/config/db.js           MongoDB connection (MONGODB_URI only); Demo Mode when it is not set
+src/store/memory.js        In-memory Demo Mode store (used only without MONGODB_URI)
 src/models/                Mongoose models: Item, Claim, Category,
                            StaffAccount, ActivityLog, SweepTask,
                            Inquiry, Counter (for LF-2026-XXXX IDs)
