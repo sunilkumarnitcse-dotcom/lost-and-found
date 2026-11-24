@@ -1,0 +1,32 @@
+/* Simple, readable, responsive — SRS NFR-01, NFR-06, NFR-09. */
+* { box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; margin: 0; background: #f4f6f8; color: #1c2733; line-height: 1.5; }
+header { background: #14324f; color: #fff; padding: 20px 16px; }
+header h1 { margin: 0 0 4px; font-size: 1.6rem; }
+.tagline { margin: 0 0 14px; color: #cfe0ef; }
+nav { display: flex; flex-wrap: wrap; gap: 8px; }
+nav button { background: #ffffff22; color: #fff; border: 1px solid #ffffff55; padding: 8px 14px; border-radius: 6px; cursor: pointer; }
+nav button.active, nav button:hover { background: #fff; color: #14324f; }
+main { max-width: 960px; margin: 0 auto; padding: 16px; }
+section { background: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+h2 { margin-top: 0; }
+form { display: grid; gap: 10px; max-width: 640px; }
+label { display: grid; gap: 4px; font-weight: 600; }
+input, select, textarea, button { font: inherit; padding: 9px 10px; border: 1px solid #b9c4cf; border-radius: 6px; }
+textarea { min-height: 80px; resize: vertical; }
+button { background: #14324f; color: #fff; border: none; cursor: pointer; }
+button:hover { opacity: 0.9; }
+.filters { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.cards { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.card { border: 1px solid #d7dee5; border-radius: 8px; padding: 12px; background: #fff; }
+.card h3 { margin: 0 0 6px; }
+.card p { margin: 4px 0; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 20px; background: #e3edf7; font-size: 0.85rem; }
+.message { background: #e6f4ea; border: 1px solid #a8d5b5; padding: 10px; border-radius: 6px; }
+.message.error { background: #fdecea; border-color: #f5b5b0; }
+footer { text-align: center; color: #5a6b7a; padding: 16px; font-size: 0.9rem; }
+ul { padding-left: 20px; }
+@media (max-width: 600px) {
+  header h1 { font-size: 1.3rem; }
+  main { padding: 8px; }
+}

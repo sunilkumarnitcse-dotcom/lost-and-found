@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Campus Lost &amp; Found</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Smart Campus Lost &amp; Found</h1>
+    <p class="tagline">Khoyi hui cheez report karo, mili hui cheez dhoondho, aur claim karke wapas lo.</p>
+    <nav>
+      <button data-tab="board" class="active">Found Board</button>
+      <button data-tab="report">Report Lost / Found</button>
+      <button data-tab="staff">Staff / Admin</button>
+      <button data-tab="contact">Contact Us</button>
+    </nav>
+  </header>
+
+  <main>
+    <p id="message" class="message" hidden></p>
+
+    <!-- ============ FOUND BOARD ============ -->
+    <section id="tab-board" class="tab">
+      <h2>Found Items — Approved Listings</h2>
+      <p>Only items approved by Staff appear here (SRS FR-01, FR-05). Contact details are never shown publicly.</p>
+      <form id="search-form" class="filters">
+        <input type="search" id="q" placeholder="Search by keyword, e.g. wallet">
+        <select id="filter-category"><option value="">All categories</option></select>
+        <input type="date" id="filter-date" title="Date">
+        <input type="text" id="filter-location" placeholder="Location">
+        <select id="filter-type">
+          <option value="found">Found items</option>
+          <option value="lost">Lost items</option>
+        </select>
+        <button type="submit">Search</button>
+        <button type="button" id="clear-filters">Clear</button>
+      </form>
+      <div id="board" class="cards"></div>
+    </section>
+
+    <!-- ============ REPORT ============ -->
+    <section id="tab-report" class="tab" hidden>
+      <h2>Report a Lost or Found Item</h2>
+      <p>Fields marked * are required. Your report starts as <strong>Pending</strong> — Staff will approve it before it appears on the board.</p>
+      <form id="report-form">
+        <label>Type *
+          <select name="type" required>
+            <option value="lost">Lost — I lost this item</option>
+            <option value="found">Found — I found this item</option>
+          </select>
+        </label>
+        <label>Item name *
+          <input name="title" required maxlength="120" placeholder="e.g. Brown Wallet">
+        </label>
+        <label>Category *
+          <select name="category" id="report-category" required></select>
+        </label>
+        <label>Description *
+          <textarea name="description" required maxlength="2000" placeholder="Colour, brand, marks, what was inside..."></textarea>
+        </label>
+        <label>Location *
+          <input name="location" required placeholder="e.g. Library">
+        </label>
+        <label>Date *
+          <input type="date" name="date" required>
+        </label>
+        <label>Photo reference (optional)
+          <input name="photoRef" placeholder="File name or link, if any">
+        </label>
+        <label>Last known location (for lost items, FR-17)
+          <input name="lastKnownLocation" placeholder="e.g. Library, 2nd floor">
+        </label>
+        <label>Approximate time last seen
+          <input type="datetime-local" name="lastSeenAt">
+        </label>
+        <label>Your name *
+          <input name="reporterName" required>
+        </label>
+        <label>Your contact details * (private — never shown publicly)
+          <input name="reporterContact" required placeholder="Phone / email">
+        </label>
+        <button type="submit">Submit Report</button>
+      </form>
+      <p id="report-result"></p>
+    </section>
+
+    <!-- ============ STAFF / ADMIN ============ -->
+    <section id="tab-staff" class="tab" hidden>
+      <h2>Staff / Admin</h2>
+      <div id="login-box">
+        <p>Log in with your Staff or Admin PIN. Demo PINs are in the README / .env — change them before real use.</p>
+        <form id="login-form">
+          <label>PIN <input type="password" id="pin" required></label>
+          <button type="submit">Log In</button>
+        </form>
+      </div>
+      <div id="staff-area" hidden>
+        <p>Logged in as <strong id="staff-name"></strong> (<span id="staff-role"></span>)
+          <button id="logout-btn" type="button">Log Out</button></p>
+
+        <h3>Pending Reports</h3>
+        <div id="pending-list" class="cards"></div>
+
+        <h3>Claims to Review</h3>
+        <div id="claims-list" class="cards"></div>
+
+        <h3>Search-Sweep Tracker</h3>
+        <p>Enter a lost item's reference ID (e.g. LF-2026-0001) to see its campus-area checklist.</p>
+        <form id="sweep-form">
+          <input id="sweep-ref" placeholder="LF-2026-0001" required>
+          <button type="submit">Load Checklist</button>
+        </form>
+        <div id="sweep-area"></div>
+
+        <div id="admin-area" hidden>
+          <h3>Admin Dashboard</h3>
+          <div id="dashboard"></div>
+          <h3>Categories</h3>
+          <form id="category-form">
+            <input id="new-category" placeholder="New category name" required>
+            <button type="submit">Add Category</button>
+          </form>
+          <ul id="category-list"></ul>
+          <h3>Staff Accounts</h3>
+          <form id="staff-form">
+            <input id="new-staff-name" placeholder="Name" required>
+            <select id="new-staff-role"><option>Staff</option><option>Admin</option></select>
+            <input id="new-staff-pin" placeholder="PIN (min 4 chars)" required minlength="4">
+            <button type="submit">Add Account</button>
+          </form>
+          <ul id="staff-list"></ul>
+          <h3>Recent Activity</h3>
+          <ul id="activity-list"></ul>
+          <h3>Inquiries</h3>
+          <ul id="inquiry-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section id="tab-contact" class="tab" hidden>
+      <h2>Contact / Inquiry</h2>
+      <p>Ask the Lost &amp; Found team a question. Your contact details stay private.</p>
+      <form id="inquiry-form">
+        <label>Your name * <input name="name" required></label>
+        <label>Your contact * <input name="contact" required></label>
+        <label>Message * <textarea name="message" required maxlength="2000"></textarea></label>
+        <button type="submit">Send Inquiry</button>
+      </form>
+      <p id="inquiry-result"></p>
+    </section>
+
+    <!-- ============ ITEM DETAILS ============ -->
+    <section id="item-details" hidden>
+      <h2>Item Details</h2>
+      <div id="details-box"></div>
+      <h3>Possible Matches (suggestion only — not proof of ownership)</h3>
+      <div id="matches-box" class="cards"></div>
+      <h3>Claim This Found Item</h3>
+      <p>Only for Available found items. Staff will review your evidence before approving.</p>
+      <form id="claim-form">
+        <label>Your name * <input name="claimantName" required></label>
+        <label>Your contact * (private) <input name="claimantContact" required></label>
+        <label>Ownership evidence * <textarea name="evidence" required placeholder="e.g. bill, photo, ID card number, what was inside the wallet..."></textarea></label>
+        <button type="submit">Submit Claim</button>
+      </form>
+      <p id="claim-result"></p>
+      <button type="button" id="back-to-board">Back to Board</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>Smart Campus Lost &amp; Found — built from the SRS / SDS / ADT. Backend: Node.js + Express + MongoDB.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
